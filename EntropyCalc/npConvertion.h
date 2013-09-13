@@ -129,6 +129,63 @@ int * get_gpu_pointer_int_array( np::ndarray const & array )
 
 }
 
+int64_t * get_pointer_int64_array( np::ndarray const & array )
+{
+	if (array.get_dtype() != np::dtype::get_builtin<int64_t>()) {
+			PyErr_SetString(PyExc_TypeError, "Incorrect array data type. Make sure you create numpy arrays with numpy.int64");
+	        p::throw_error_already_set();
+	    }
+	    if (array.get_nd() != 1) {
+	        PyErr_SetString(PyExc_TypeError, "Incorrect number of dimensions. This method is for 1D arrays only.");
+	        p::throw_error_already_set();
+	    }
+
+	    if (!(array.get_flags() & np::ndarray::C_CONTIGUOUS)) {
+	        PyErr_SetString(PyExc_TypeError, "Array must be row-major contiguous. Use numpy.require in Python to ensure this before calling this method.");
+	        p::throw_error_already_set();
+	    }
+
+	    return reinterpret_cast<int64_t*>(array.get_data());
+}
+
+int64_t * get_gpu_pointer_int64_array( np::ndarray const & array )
+{
+	if (array.get_dtype() != np::dtype::get_builtin<int64_t>()) {
+	        PyErr_SetString(PyExc_TypeError, "Incorrect array data type. Make sure you create numpy arrays with numpy.int64");
+	        p::throw_error_already_set();
+	    }
+	    if (array.get_nd() != 1) {
+	        PyErr_SetString(PyExc_TypeError, "Incorrect number of dimensions. This method is for 1D arrays only.");
+	        p::throw_error_already_set();
+	    }
+
+	    if (!(array.get_flags() & np::ndarray::C_CONTIGUOUS)) {
+	        PyErr_SetString(PyExc_TypeError, "Array must be row-major contiguous. Use numpy.require in Python to ensure this before calling this method.");
+	        p::throw_error_already_set();
+	    }
+
+
+	    int64_t * cpu_pointer = reinterpret_cast<int64_t*>(array.get_data());
+
+	    int64_t * gpu_pointer;
+	    checkCudaErrors( cudaMalloc((void**)&gpu_pointer, array.shape(0) * sizeof(int64_t)) );
+	    checkCudaErrors( cudaMemcpy(gpu_pointer, cpu_pointer, array.shape(0) * sizeof(int64_t), cudaMemcpyHostToDevice ) );
+
+	    return gpu_pointer;
+
+}
+
+
+__global__ void print_gpu_int64_array( int64_t * array, int size )
+{
+	printf("\n\n========== int64 array printout ===========\n[ ");
+	for( int i = 0; i < size; i++ )
+	{
+		printf("%lld ", array[i]);
+	}
+	printf("]\n============================================\n\n");
+
+}
 
 
 #endif /* NPCONVERTION_H_ */
