@@ -32,6 +32,7 @@ __global__ void process_i( int offset, int64_t * data, int data_len, int64_t * o
 		// by the sum of the array divide by the number of non -1 numbers.
 		// therefore putting 0 here is correct.
 		output[idx] = 0;
+		return;
 	}
 
 
