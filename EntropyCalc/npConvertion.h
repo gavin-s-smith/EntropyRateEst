@@ -2,7 +2,7 @@
  * npConvertion.h
  *
  *  Created on: 9 Jun 2013
- *      Author: Gavin Smith
+ *  Author: Gavin Smith
  */
 
 #ifndef NPCONVERTION_H_
