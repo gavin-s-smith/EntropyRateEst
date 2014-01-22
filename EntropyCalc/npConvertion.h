@@ -14,7 +14,7 @@
 #include <boost/program_options.hpp>
 #include <boost/python.hpp>
 #include <boost/numpy.hpp>
-#include "helper_cuda.h"
+//#include "helper_cuda.h"
 
 namespace p = boost::python;
 namespace np = boost::numpy;
