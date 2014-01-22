@@ -95,7 +95,7 @@ void EC( np::ndarray const & array_in, np::ndarray const & array_out )
 
 	if( array_in.shape(0) != array_out.shape(0) )
 	{
-		PyErr_SetString(PyExc_TypeError, "\n\nError in EC (cuda code). Two passed arrays must be equal.");
+		PyErr_SetString(PyExc_TypeError, "\n\nError in EC (cuda code). Two passed arrays must be equal length.");
 		p::throw_error_already_set();
 	}
 
